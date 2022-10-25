@@ -1,0 +1,45 @@
+version: "3.9"
+name: Files
+
+x-kraud-ui:
+  label: "Files by filebrowser.org"
+  description: |
+    Upload, Preview and share Files.
+
+    Filebrowser provides a file managing interface within a specified directory and it can be used to upload, delete, preview, rename and edit your files. It allows the creation of multiple users and each user can have its own directory. It can be used as a standalone app.
+  logo_url: "https://raw.githubusercontent.com/filebrowser/filebrowser/master/frontend/public/img/logo.svg"
+  ext_url: "https://filebrowser.org/"
+  config:
+    ingress:
+      INGRESS:
+        label: "web interface domain"
+        description: "domain where filebrowser will be hosted at"
+        protocol: "https"
+        default: "files.*"
+        required: true
+
+    volumes:
+      FILES:
+        label: "file storage"
+        description: "Volume where we uploaded files will be stored"
+        required: true
+        default: "files"
+
+volumes:
+  files:
+    name: ${FILES:-files}
+    driver: rbd
+
+services:
+  filebrowser:
+    container_name: filebrowser
+    image: filebrowser/filebrowser
+    labels:
+      - kr.ingress.80=${INGRESS:-https://files.*}
+
+    volumes:
+      - files:/data
+    command: --database /data/.index.db --root /data/
+    ports:
+      - 80:80
+

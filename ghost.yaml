@@ -1,0 +1,58 @@
+version: "3.9"
+name: Ghost
+
+x-kraud-ui:
+  label: "Ghost - blogging"
+  description: |
+    Ghost is a powerful app for new-media creators to publish, share, and grow a business around their content.
+    It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
+
+  logo_url: "https://ghost.org/images/logos/logo-black-1.png"
+  ext_url: "https://ghost.org/"
+  config:
+    ingress:
+      database:
+        label: "web domain"
+        description: "domain where the app will be hosted at"
+        protocol: "https"
+        default: "ghost.*"
+        required: true
+
+    volumes:
+      DATABASE:
+        label: "database"
+        description: "Volume where database will be located"
+        required: true
+        default: "ghost-mysql"
+
+volumes:
+  database:
+    name: ${DATABASE:-ghost-mysql}
+    driver: "rbd"
+
+
+services:
+
+  ghost:
+    container_name: ghost
+    image: ghost:4-alpine
+    restart: always
+    labels:
+      - kr.ingress.2368=${INGRESS:-https://ghost.*}
+    environment:
+      # see https://ghost.org/docs/config/#configuration-options
+      - database__client=mysql
+      - database__connection__host=db
+      - database__connection__user=root
+      - database__connection__password=fixmesecurerandom
+      - database__connection__database=ghost
+      - url=${INGRESS:-http://localhost:8080}
+
+  db:
+    container_name: db
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=fixmesecurerandom
