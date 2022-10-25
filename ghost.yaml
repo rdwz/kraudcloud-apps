@@ -11,7 +11,7 @@ x-kraud-ui:
   ext_url: "https://ghost.org/"
   config:
     ingress:
-      database:
+      INGRESS:
         label: "web domain"
         description: "domain where the app will be hosted at"
         protocol: "https"
