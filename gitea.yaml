@@ -53,6 +53,8 @@ services:
       - gitea:/data
     ports:
       - "3000:3000"
+    depends_on:
+      - db
 
   db:
     image: postgres:14
