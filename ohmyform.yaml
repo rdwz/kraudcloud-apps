@@ -1,0 +1,52 @@
+version: "3"
+name: OhMyForm
+
+x-kraud-ui:
+  label: "OhMyForm"
+  description: |
+    Craft beautiful forms in seconds
+
+    Create stunning embedable forms for recruiting, market research, surveys and more.
+
+  logo_url: "https://avatars.githubusercontent.com/u/52511516?s=200&v=4"
+  ext_url: "https://ohmyform.com/"
+  config:
+    ingress:
+      INGRESS:
+        label: "web interface domain"
+        description: "domain where ohmyform will be hosted at"
+        protocol: "https"
+        default: "ohmyform.*"
+        required: true
+    volumes:
+      DATA:
+        label: "file storage"
+        description: "Volume where we your form data will be sotred"
+        required: true
+        default: "files"
+
+volumes:
+  data:
+    name: ${DATA:-data}
+    driver: rbd
+
+
+services:
+  ohmyform:
+    image: ohmyform/ohmyform
+    volumes:
+      - "data:/data"
+    labels:
+      - kr.ingress.3000=${INGRESS:-https://ohmyform.*}
+    environment:
+      CREATE_ADMIN: "TRUE"
+      ADMIN_EMAIL: admin@local.host
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+      DATABASE_DRIVER: sqlite
+      DATABASE_URL: "sqlite:///data/data.sqlite"
+      MAILER_URI: smtp://local.host
+      LOGIN_NOTE: "Either login with admin:admin or create your own account to test OhMyForm"
+    ports:
+      - "8080:3000"
+    restart: unless-stopped
