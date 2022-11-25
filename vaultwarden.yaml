@@ -1,0 +1,53 @@
+version: "3.9"
+name: vaulwarden
+
+x-kraud-ui:
+  label: "Vaultwarden - Lightweight bitwarden implementation"
+  description: |
+   Unofficial Bitwarden compatible server written in Rust
+
+   ## Features
+
+    Basically full implementation of Bitwarden API is provided including:
+
+    Organizations support
+    Attachments
+    Vault API support
+    Serving the static files for Vault interface
+    Website icons API
+    Authenticator and U2F support
+    YubiKey and Duo support
+
+  post_launch: | 
+    [Check out the docs](https://github.com/dani-garcia/vaultwarden/wiki) to learn how to configure your vaultwarden instance.
+
+  logo_url: "https://avatars.githubusercontent.com/u/15990069?s=200&v=4"
+  ext_url: "https://github.com/dani-garcia/vaultwarden"
+  config:
+    ingress:
+      INGRESS:
+        label: "web dashboard"
+        description: "web dashboard for vaultwarden"
+        protocol: "https"
+        default: "vault.*"
+        required: true
+
+services:
+  vault:
+    container_name: vault
+    image: vaultwarden/server:1.26.0-alpine
+    restart: always
+    labels:
+      - kr.ingress.80=${INGRESS:-https://vault.*}
+    ports:
+      - "80:80"
+    environment:
+      WEBSOCKET_ENABLED: "true"
+    volumes:
+      - vault-data:/data
+
+volumes:
+  vault-data:
+    name: vault-data
+    driver: "local"
+
