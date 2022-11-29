@@ -5,7 +5,6 @@ x-kraud-ui:
   label: "OhMyForm"
   description: |
     Craft beautiful forms in seconds
-
     Create stunning embedable forms for recruiting, market research, surveys and more.
 
   logo_url: "https://avatars.githubusercontent.com/u/52511516?s=200&v=4"
@@ -21,13 +20,13 @@ x-kraud-ui:
     volumes:
       DATA:
         label: "file storage"
-        description: "Volume where we your form data will be sotred"
+        description: "Volume where we your form data will be stored"
         required: true
-        default: "files"
+        default: "ohmyform-data"
 
 volumes:
-  data:
-    name: ${DATA:-data}
+  ohmyform-data:
+    name: ${DATA:-ohmyform-data}
     driver: rbd
 
 
@@ -35,7 +34,7 @@ services:
   ohmyform:
     image: ohmyform/ohmyform
     volumes:
-      - "data:/data"
+      - "ohmyform-data:/data"
     labels:
       - kr.ingress.3000=${INGRESS:-https://ohmyform.*}
     environment:

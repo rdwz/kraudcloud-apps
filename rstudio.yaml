@@ -1,0 +1,52 @@
+version: "3.9"
+name: rstudio
+
+x-kraud-ui:
+  label: "Posit RStudio Server"
+  description: |
+    RStudio Server enables you to run the RStudio IDE you know and love on a Linux server,
+    accessed from your web browser,
+    bringing the power and productivity of the RStudio IDE to a centralized server-based environment.
+
+  post_launch: |
+    login with user rstudio and password ${PASSWORD:-VerySecure123}
+
+  logo_url: "https://avatars.githubusercontent.com/u/513560?s=200&v=4"
+  ext_url: "https://posit.co/products/open-source/rstudio-server/"
+  config:
+    ingress:
+      INGRESS:
+        label: "web interface domain"
+        description: "domain where rstudio will be served at"
+        protocol: "https"
+        default: "rstudio.*"
+        required: true
+
+    volumes:
+      FILES:
+        label: "file storage"
+        description: "Volume where we persistent files will be stored"
+        required: true
+        default: "rstudio-home"
+    environment:
+      PASSWORD:
+        label: password of user rstudio
+        description: "password of user rstudio"
+        required: true
+
+volumes:
+  home:
+    name: ${FILES:-rstudio-home}
+    driver: rbd
+
+services:
+  filebrowser:
+    container_name: rstudio
+    image: rocker/rstudio:4.1.2
+    labels:
+      - kr.ingress.8787=${INGRESS:-https://rstudio.*}
+    volumes:
+      - home:/home/rstudio/
+    environment:
+      PASSWORD: ${PASSWORD:-VerySecure123}
+
