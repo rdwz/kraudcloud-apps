@@ -7,23 +7,22 @@ x-kraud-ui:
     Ghost is a powerful app for new-media creators to publish, share, and grow a business around their content.
     It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
-  logo_url: "https://ghost.org/images/logos/logo-black-1.png"
+  logo_url: "https://avatars.githubusercontent.com/u/2178663"
   ext_url: "https://ghost.org/"
   config:
-    ingress:
-      INGRESS:
-        label: "web domain"
-        description: "domain where the app will be hosted at"
-        protocol: "https"
-        default: "ghost.*"
-        required: true
-
-    volumes:
-      DATABASE:
-        label: "database"
-        description: "Volume where database will be located"
-        required: true
-        default: "ghost-mysql"
+    INGRESS:
+      kind: "ingress"
+      label: "web domain"
+      description: "domain where the app will be hosted at"
+      protocol: "https"
+      default: "ghost.*"
+      required: true
+    DATABASE:
+      kind: "volume"
+      label: "database"
+      description: "Volume where database will be located"
+      required: true
+      default: "ghost-mysql"
 
 volumes:
   ghost-mysql:

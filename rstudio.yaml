@@ -14,22 +14,21 @@ x-kraud-ui:
   logo_url: "https://avatars.githubusercontent.com/u/513560?s=200&v=4"
   ext_url: "https://posit.co/products/open-source/rstudio-server/"
   config:
-    ingress:
       INGRESS:
+        kind: ingress
         label: "web interface domain"
         description: "domain where rstudio will be served at"
         protocol: "https"
         default: "rstudio.*"
         required: true
-
-    volumes:
       FILES:
+        kind: volume
         label: "file storage"
         description: "Volume where we persistent files will be stored"
         required: true
         default: "rstudio-home"
-    environment:
       PASSWORD:
+        kind: environment
         label: password of user rstudio
         description: "password of user rstudio"
         required: true

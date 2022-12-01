@@ -25,18 +25,19 @@ x-kraud-ui:
   logo_url: "https://avatars.githubusercontent.com/u/43250847?s=200&v=4"
   ext_url: "https://www.meilisearch.com/"
   config:
-    ingress:
-      INGRESS:
-        label: "http endpoint"
-        description: "http endpoint of meilisearch"
-        protocol: "https"
-        default: "meili.*"
-        required: true
-    environment:
-      MEILI_MASTER_KEY:
-        label: master key
-        description: "master key for meilisearch"
-        required: true
+    INGRESS:
+      kind: "ingress"
+      label: "http endpoint"
+      description: "http endpoint of meilisearch"
+      protocol: "https"
+      default: "meili.*"
+      required: true
+    MEILI_MASTER_KEY:
+      kind: "environment"
+      label: master key
+      default: kr.generation.string(32)
+      description: "master key for meilisearch"
+      required: true
 
 services:
   meili:

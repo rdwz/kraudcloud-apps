@@ -38,20 +38,19 @@ x-kraud-ui:
   logo_url: "https://github.githubassets.com/images/icons/emoji/unicode/2600.png"
   ext_url: "https://evcc.io/"
   config:
-    ingress:
-      INGRESS:
-        label: "web interface domain"
-        description: "domain where filebrowser will be hosted at"
-        protocol: "https"
-        default: "evcc.*"
-        required: true
-
-    volumes:
-      EVCC:
-        label: "file storage"
-        description: "Volume where we persistent data will be stored"
-        required: true
-        default: "evcc"
+    INGRESS:
+      kind: "ingress"
+      label: "web interface domain"
+      description: "domain where filebrowser will be hosted at"
+      protocol: "https"
+      default: "evcc.*"
+      required: true
+    EVCC:
+      kind: "volume"
+      label: "file storage"
+      description: "Volume where we persistent data will be stored"
+      required: true
+      default: "evcc"
 
 volumes:
   rvcc:

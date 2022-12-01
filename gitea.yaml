@@ -17,15 +17,15 @@ x-kraud-ui:
   logo_url: "https://docs.gitea.io/images/gitea.png"
   ext_url: "https://gitea.io/"
   config:
-    ingress:
-      INGRESS:
-        label: "web UI domain"
-        description: |
-          Domain where the app will be hosted.
-          You will need to configure the application to use this domain in the first launch as well
-        protocol: "https"
-        default: "gitea.*"
-        required: true
+    INGRESS:
+      kind: "ingress"
+      label: "web UI domain"
+      description: |
+        Domain where the app will be hosted.
+        You will need to configure the application to use this domain in the first launch as well
+      protocol: "https"
+      default: "gitea.*"
+      required: true
 
 volumes:
   gitea:

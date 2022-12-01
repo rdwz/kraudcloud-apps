@@ -9,20 +9,19 @@ x-kraud-ui:
   logo_url: "https://raw.githubusercontent.com/filebrowser/filebrowser/master/frontend/public/img/logo.svg"
   ext_url: "https://filebrowser.org/"
   config:
-    ingress:
-      INGRESS:
-        label: "web interface domain"
-        description: "domain where filebrowser will be hosted at"
-        protocol: "https"
-        default: "files.*"
-        required: true
-
-    volumes:
-      FILES:
-        label: "file storage"
-        description: "Volume where we uploaded files will be stored"
-        required: true
-        default: "files"
+    INGRESS:
+      kind: "ingress"
+      label: "web interface domain"
+      description: "domain where filebrowser will be hosted at"
+      protocol: "https"
+      default: "files.*"
+      required: true
+    FILES:
+      kind: "volume"
+      label: "file storage"
+      description: "Volume where we uploaded files will be stored"
+      required: true
+      default: "files"
 
 volumes:
   files:

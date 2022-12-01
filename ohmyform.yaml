@@ -10,19 +10,19 @@ x-kraud-ui:
   logo_url: "https://avatars.githubusercontent.com/u/52511516?s=200&v=4"
   ext_url: "https://ohmyform.com/"
   config:
-    ingress:
-      INGRESS:
-        label: "web interface domain"
-        description: "domain where ohmyform will be hosted at"
-        protocol: "https"
-        default: "ohmyform.*"
-        required: true
-    volumes:
-      DATA:
-        label: "file storage"
-        description: "Volume where we your form data will be stored"
-        required: true
-        default: "ohmyform-data"
+    INGRESS:
+      kind: "ingress"
+      label: "web interface domain"
+      description: "domain where ohmyform will be hosted at"
+      protocol: "https"
+      default: "ohmyform.*"
+      required: true
+    DATA:
+      kind: "volume"
+      label: "file storage"
+      description: "Volume where we your form data will be sotred"
+      required: true
+      default: "files"
 
 volumes:
   ohmyform-data:
