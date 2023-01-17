@@ -1,0 +1,75 @@
+version: "3.9"
+name: mysql
+
+x-kraud-ui:
+  label: "Mysql - Most popular open source database"
+  description: |
+    ## Warning
+
+    This app is based on the [mysql](https://hub.docker.com/_/mysql) docker image, and is configured to use SSL.
+
+    It is secure, but not replicated or backed up. It is not suitable for production use.
+
+    ## What is MySQL?
+
+    MySQL is the world's most popular open source database.
+    With its proven performance, reliability and ease-of-use, MySQL has become the leading database choice for web-based applications,
+    covering the entire range from personal projects and websites, via e-commerce and information services,
+    all the way to high profile web properties including Facebook, Twitter, YouTube, Yahoo! and many more.
+
+    For more information and related downloads for MySQL Server and other MySQL products, please visit [mysql.com](https://mysql.com).
+  post_launch: |
+    [Check out the docs](https://dev.mysql.com/doc/) to connect to your new mysql database.
+    The password is `$MYSQL_ROOT_PASSWORD`. Save it somewhere safe.
+
+    To connect to the database, you will need to download the certs.
+
+    Then `mysql -uroot -h $$HOST_DOMAIN -P $$HOST_PORT --password=$MYSQL_ROOT_PASSWORD --ssl-ca=ca.pem --ssl-key=client-key.pem --ssl-cert=client-cert.pem`
+
+  logo_url: "https://avatars.githubusercontent.com/u/2452804?s=200&v=4"
+  ext_url: https://mysql.com/
+  config:
+    ADDITIONAL_DOMAINS:
+      kind: "environment"
+      label: "additional domains"
+      description: "additional domains to add to the certificate for routing (comma separated)"
+      default: "*.1d.pt,*.kraud.cloud"
+      required: true
+    MYSQL_ROOT_PASSWORD:
+      kind: "hidden"
+      label: database password
+      description: "database password for database"
+      default: "{{ randAlphaNum 32 }}"
+      hidden: true
+    MYSQL_DATABASE:
+      kind: "environment"
+      label: database name
+      default: "defaultdb"
+      description: "database name"
+      required: true
+
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8.0.31
+    labels:
+      - kr.ingress.tcp.3306=tcp://
+      - kr.x509.mysql.ca=algo:rsa,bits:2048,path:/ect/mysql/ca.pem
+      - kr.x509.mysql.cert=algo:rsa,bits:2048,cert_path:/ect/mysql/server-cert.pem,key_path:/ect/mysql/server-key.pem,dns:localhost,${ADDITIONAL_DOMAINS:-dns:*.1d.pt,dns:*.kraud.cloud}
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD?database password required}
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: ${MYSQL_DATABASE-defaultdb}
+      ADDITIONAL_DOMAINS: '${ADDITIONAL_DOMAINS:-*.1d.pt,*.kraud.cloud}'
+      OPENSSL_SUBJ: "/O=KraudCloud/OU=KraudCloud/CN=localhost,${ADDITIONAL_DOMAINS:-*.1d.pt,*.kraud.cloud}"
+    entrypoint: |
+      /bin/bash -c 'exec docker-entrypoint.sh --bind-address=0.0.0.0 --ssl-ca=/ect/mysql/ca.pem --ssl-cert=/ect/mysql/server-cert.pem --ssl-key=/ect/mysql/server-key.pem --require-secure-transport=ON'
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+    name: mysql-data
+    driver: "local"

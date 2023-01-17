@@ -1,0 +1,55 @@
+version: '3.9'
+name: uptime-kuma
+
+x-kraud-ui:
+  label: "Uptime Kuma \u2013 Monitor your services"
+  description: |
+      Uptime Kuma is a free and open source monitoring tool for websites and other internet services.
+      It will periodically send HTTP requests to your services and alert you via email, Discord, Telegram, and more when they go down.
+      It also has a built-in dashboard to help you keep track of your services.
+
+      ## Features
+
+      - Monitoring uptime for HTTP(s) / TCP / HTTP(s) Keyword / Ping / DNS Record / Push / Steam Game Server / Docker Containers.
+      - Fancy, Reactive, Fast UI/UX.
+      - Notifications via Telegram, Discord, Gotify, Slack, Pushover, Email (SMTP), and 90+ notification services, click here for the full list.
+      - 20 second intervals.
+      - Multi Languages
+      - Multiple Status Pages
+      - Map Status Page to Domain
+      - Ping Chart
+      - Certificate Info
+      - Proxy Support
+      - 2FA available
+
+      ## Preview
+    
+      ![image](https://camo.githubusercontent.com/9674a2b1b7d094b060fd79e6df7dca10b86a484ce6015b2668cff768dfc786ee/68747470733a2f2f757074696d652e6b756d612e7065742f696d672f6461726b2e6a7067)
+
+  logo_url: "https://github.com/louislam/uptime-kuma/raw/1.9.X/public/icon.svg"
+  ext_url: "https://github.com/louislam/uptime-kuma"
+  config:
+    INGRESS:
+      kind: "ingress"
+      label: "web UI domain"
+      description: Domain where the app will be hosted.
+      protocol: "https"
+      default: "uptime.*"
+      required: true
+
+volumes:
+  uptime-kuma_data:
+    name: uptime-kuma_data
+    driver: "local"
+
+services:
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma:1
+    restart: unless-stopped
+    labels:
+      - kr.ingress.http.3001=${INGRESS:-https://uptime.*}
+    ports: 
+      - 3001:3001
+    volumes:
+      - uptime-kuma_data:/app/data

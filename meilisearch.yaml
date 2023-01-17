@@ -19,8 +19,10 @@ x-kraud-ui:
 
     ![demo gif](https://docs.meilisearch.com/crates-io-demo.gif)
 
-  post_launch: | 
+  post_launch: |
     [Check out the docs](https://docs.meilisearch.com/) to learn how to login to your new MeiliSearch instance.
+
+    `${MEILI_MASTER_KEY}` should be used as the master key for your MeiliSearch instance.
 
   logo_url: "https://avatars.githubusercontent.com/u/43250847?s=200&v=4"
   ext_url: "https://www.meilisearch.com/"
@@ -33,9 +35,9 @@ x-kraud-ui:
       default: "meili.*"
       required: true
     MEILI_MASTER_KEY:
-      kind: "environment"
+      kind: "hidden"
       label: master key
-      default: kr.generation.string(32)
+      default: "{{ randAlphaNum 32 }}"
       description: "master key for meilisearch"
       required: true
 
@@ -56,4 +58,3 @@ volumes:
   meili-data:
     name: meili-data
     driver: "local"
-
