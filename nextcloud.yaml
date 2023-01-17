@@ -1,0 +1,67 @@
+version: '3.9'
+name: nextcloud
+
+x-kraud-ui:
+  label: "Nextcloud Hub - Remote collaboration"
+  description: |
+    Regain control over your data
+
+    Remote collaboration made easy
+
+    - On-premises or cloud
+    - Customizable and scaleable
+    - No data leaks to third parties
+
+    Hub integrates the four key Nextcloud products Files, Talk, Groupware and Office into a single platform, optimizing the flow of collaboration.
+
+  logo_url: "https://avatars.githubusercontent.com/u/19211038"
+  ext_url: "https://nextcloud.com/"
+  config:
+    INGRESS:
+      kind: "ingress"
+      label: "web UI domain"
+      description: Domain where the app will be hosted.
+      protocol: "https"
+      default: "nextcloud.*"
+      required: true
+
+
+volumes:
+  nextcloud_data:
+    name: nextcloud_data
+    driver: "local"
+  nextcloud_db:
+    name: nextcloud_db
+    driver: "local"
+
+services:
+  app:
+    container_name: nextcloud
+    image: nextcloud:production-apache
+    restart: unless-stopped
+    labels:
+      - kr.ingress.http.80=${INGRESS:-https://nextcloud.*}
+    depends_on:
+      - db
+    ports:
+      - 80:80
+    volumes:
+      - nextcloud_data:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=f70fd326b5b74126991190807f780eb1
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+
+  db:
+    container_name: nextcloud_db
+    image: mariadb:10.5
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - nextcloud_db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=f70fd326b5b74126991190807f780eb1
+      - MYSQL_PASSWORD=f70fd326b5b74126991190807f780eb1
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
