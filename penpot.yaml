@@ -123,11 +123,9 @@ x-env-file: &env_file
 
 volumes:
   penpot_postgres_data:
-    name: penpot_postgres_data
-    driver: "local"
+    driver: "rbd"
   penpot_assets_data:
-    name: penpot_assets_data
-    driver: "local"
+    driver: "gfs"
 
 services:
   penpot-frontend:

@@ -71,5 +71,4 @@ services:
 
 volumes:
   mysql-data:
-    name: mysql-data
-    driver: "local"
+    driver: "rbd"

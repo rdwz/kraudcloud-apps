@@ -62,6 +62,5 @@ services:
 
 volumes:
   umami-db-data:
-    name: umami-db-data
-    driver: "local"
+    driver: "rbd"
 
