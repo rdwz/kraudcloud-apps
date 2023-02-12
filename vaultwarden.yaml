@@ -48,6 +48,5 @@ services:
 
 volumes:
   vault-data:
-    name: vault-data
-    driver: "local"
+    driver: "rbd"
 

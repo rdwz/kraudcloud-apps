@@ -45,16 +45,9 @@ x-kraud-ui:
       protocol: "https"
       default: "evcc.*"
       required: true
-    EVCC:
-      kind: "volume"
-      label: "file storage"
-      description: "Volume where we persistent data will be stored"
-      required: true
-      default: "evcc"
 
 volumes:
-  rvcc:
-    name: ${EVCC:-evcc}
+  evcc:
     driver: rbd
 
 services:

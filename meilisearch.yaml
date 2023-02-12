@@ -56,5 +56,4 @@ services:
 
 volumes:
   meili-data:
-    name: meili-data
-    driver: "local"
+    driver: "rbd"

@@ -29,10 +29,8 @@ x-kraud-ui:
 
 volumes:
   gitea:
-    name: gitea
     driver: "rbd"
   gitea_database:
-    name: ${DATABASE-gitea_database}
     driver: "rbd"
 
 services:

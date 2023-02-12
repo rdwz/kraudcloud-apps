@@ -17,16 +17,9 @@ x-kraud-ui:
       protocol: "https"
       default: "ohmyform.*"
       required: true
-    DATA:
-      kind: "volume"
-      label: "file storage"
-      description: "Volume where we your form data will be sotred"
-      required: true
-      default: "files"
 
 volumes:
   ohmyform-data:
-    name: ${DATA:-ohmyform-data}
     driver: rbd
 
 

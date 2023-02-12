@@ -17,16 +17,9 @@ x-kraud-ui:
       protocol: "https"
       default: "ghost.*"
       required: true
-    DATABASE:
-      kind: "volume"
-      label: "database"
-      description: "Volume where database will be located"
-      required: true
-      default: "ghost-mysql"
 
 volumes:
   ghost-mysql:
-    name: ${DATABASE:-ghost-mysql}
     driver: "rbd"
 
 
