@@ -35,7 +35,7 @@ x-kraud-ui:
 services:
   vault:
     container_name: vault
-    image: vaultwarden/server:1.28.0-alpine
+    image: vaultwarden/server:1.28.1-alpine
     restart: always
     labels:
       - kr.ingress.80=${INGRESS:-https://vault.*}
